@@ -20,6 +20,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
+/**
+ * Klasse welche die Hauptansicht des Programmes darstellt.
+ * 
+ * @author Lorenz Hankel
+ *
+ */
 public class Hauptansicht extends JFrame {
 
 	private DB db;
@@ -124,7 +130,7 @@ public class Hauptansicht extends JFrame {
 		tabbedPane.addTab("Erfolgreicher Login", null, panelErfolg, null);
 		SpringLayout sl_panelErfolg = new SpringLayout();
 		panelErfolg.setLayout(sl_panelErfolg);
-		
+
 		JLabel lblLoginErfolgreich = new JLabel("LOGIN ERFOLGREICH!");
 		lblLoginErfolgreich.setBackground(Color.GREEN);
 		sl_panelErfolg.putConstraint(SpringLayout.SOUTH, lblLoginErfolgreich, -10, SpringLayout.SOUTH, panelErfolg);

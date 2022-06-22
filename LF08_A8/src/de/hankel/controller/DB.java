@@ -7,6 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Klasse welche den Datenbank Controller darstellt.
+ * 
+ * @author Lorenz Hankel
+ *
+ */
 public class DB {
 
 	private String driver;
@@ -34,9 +40,10 @@ public class DB {
 	}
 
 	/**
-	 * Diese Methode prüft, ob die Daten in der Account Tabelle vorhanden sind und stimmen.
-	 * Gibt true zurück wenn gut, false wenn schlecht.
-	 * @param email Die E-Mail auf welche geprüft werden soll.
+	 * Diese Methode prüft, ob die Daten in der Account Tabelle vorhanden sind und
+	 * stimmen. Gibt true zurück wenn gut, false wenn schlecht.
+	 * 
+	 * @param email    Die E-Mail auf welche geprüft werden soll.
 	 * @param passwort Das Passwort, welches für die E-Mail angelegt sein soll.
 	 * @return true wenn Eingaben korrekt, false wenn falsch.
 	 */
