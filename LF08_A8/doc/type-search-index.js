@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"de.hankel.controller","l":"DB"},{"p":"de.hankel.view","l":"Hauptansicht"},{"p":"de.hankel","l":"Starte_A8_1"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"de.hankel.controller","l":"DB"},{"p":"de.hankel.view","l":"Hauptansicht"},{"p":"de.hankel.view","l":"JDialogErfolg"},{"p":"de.hankel","l":"Starte_A8"}];updateSearchResults();
