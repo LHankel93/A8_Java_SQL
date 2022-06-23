@@ -14,11 +14,19 @@ import javax.swing.ImageIcon;
 import javax.swing.SpringLayout;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.UIManager;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.SwingConstants;
+import javax.swing.JTextPane;
+import javax.swing.JTextField;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Klasse welche die Hauptansicht des Programmes darstellt.
@@ -32,6 +40,10 @@ public class Hauptansicht extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPasswordField passwordField;
+	private JTextField textFieldRegEmail;
+	private JPasswordField passwordFieldReg1;
+	private JPasswordField passwordFieldReg2;
+	private JTextField textFieldRegNickname;
 
 	/**
 	 * Standardkonstruktor des Haupt-Fensters. Soll Login und Registrieren
@@ -47,7 +59,7 @@ public class Hauptansicht extends JFrame {
 		setTitle("EgameDarling Login/Registrieren");
 		this.db = db;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 467, 368);
+		setBounds(100, 100, 489, 301);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -116,18 +128,112 @@ public class Hauptansicht extends JFrame {
 		sl_panelLogin.putConstraint(SpringLayout.SOUTH, btnRegistrieren, 0, SpringLayout.SOUTH, btnLogin);
 		panelLogin.add(btnRegistrieren);
 
+		JTextPane textPaneInfoPaneLogin = new JTextPane();
+		textPaneInfoPaneLogin.setEditable(false);
+		sl_panelLogin.putConstraint(SpringLayout.NORTH, textPaneInfoPaneLogin, 10, SpringLayout.SOUTH, btnLogin);
+		sl_panelLogin.putConstraint(SpringLayout.WEST, textPaneInfoPaneLogin, 0, SpringLayout.WEST, btnLogin);
+		sl_panelLogin.putConstraint(SpringLayout.SOUTH, textPaneInfoPaneLogin, -10, SpringLayout.SOUTH, panelLogin);
+		sl_panelLogin.putConstraint(SpringLayout.EAST, textPaneInfoPaneLogin, -10, SpringLayout.EAST, panelLogin);
+		panelLogin.add(textPaneInfoPaneLogin);
+
 		JPanel panelRegistrieren = new JPanel();
 		panelRegistrieren.setBackground(Color.WHITE);
 		tabbedPane.addTab("Registrieren",
 				new ImageIcon(Hauptansicht.class.getResource("/img/user-plus-solid_small.png")), panelRegistrieren,
 				"Hier kann ein neuer Benutzer-Account in der EGameDarling Datenbank angelegt werden.");
 		tabbedPane.setBackgroundAt(1, Color.WHITE);
-		panelRegistrieren.setLayout(new SpringLayout());
+		SpringLayout sl_panelRegistrieren = new SpringLayout();
+		panelRegistrieren.setLayout(sl_panelRegistrieren);
+
+		JLabel lblRegEmail = new JLabel("E-Mail");
+		lblRegEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, lblRegEmail, 10, SpringLayout.NORTH, panelRegistrieren);
+		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, lblRegEmail, 10, SpringLayout.WEST, panelRegistrieren);
+		panelRegistrieren.add(lblRegEmail);
+
+		JLabel lblRegPasswort1 = new JLabel("Passwort");
+		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, lblRegPasswort1, 0, SpringLayout.WEST, lblRegEmail);
+		lblRegPasswort1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, lblRegPasswort1, 10, SpringLayout.SOUTH, lblRegEmail);
+		panelRegistrieren.add(lblRegPasswort1);
+
+		textFieldRegEmail = new JTextField();
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, textFieldRegEmail, 0, SpringLayout.NORTH, lblRegEmail);
+		sl_panelRegistrieren.putConstraint(SpringLayout.EAST, textFieldRegEmail, -10, SpringLayout.EAST,
+				panelRegistrieren);
+		textFieldRegEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		sl_panelRegistrieren.putConstraint(SpringLayout.SOUTH, textFieldRegEmail, 0, SpringLayout.SOUTH, lblRegEmail);
+		panelRegistrieren.add(textFieldRegEmail);
+		textFieldRegEmail.setColumns(16);
+
+		passwordFieldReg1 = new JPasswordField();
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, passwordFieldReg1, 0, SpringLayout.NORTH,
+				lblRegPasswort1);
+		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, passwordFieldReg1, 0, SpringLayout.WEST,
+				textFieldRegEmail);
+		sl_panelRegistrieren.putConstraint(SpringLayout.EAST, passwordFieldReg1, 0, SpringLayout.EAST,
+				textFieldRegEmail);
+		panelRegistrieren.add(passwordFieldReg1);
+
+		JButton btnRegRegistrieren = new JButton("Account registrieren");
+		btnRegRegistrieren.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnRegRegistrieren.setActionCommand("starteRegistrieren");
+		panelRegistrieren.add(btnRegRegistrieren);
+
+		JLabel lblRegPasswort2 = new JLabel("Passwort wiederholen");
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, lblRegPasswort2, 10, SpringLayout.SOUTH,
+				lblRegPasswort1);
+		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, lblRegPasswort2, 0, SpringLayout.WEST, lblRegPasswort1);
+		lblRegPasswort2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panelRegistrieren.add(lblRegPasswort2);
+
+		KeyListener kL = (new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (checkRegFields()) {
+					btnRegRegistrieren.setEnabled(true);
+				} else {
+					btnRegRegistrieren.setEnabled(false);
+				}
+			}
+		});
+
+		passwordFieldReg2 = new JPasswordField();
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, passwordFieldReg2, 0, SpringLayout.NORTH,
+				lblRegPasswort2);
+		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, passwordFieldReg2, 0, SpringLayout.WEST,
+				passwordFieldReg1);
+		sl_panelRegistrieren.putConstraint(SpringLayout.EAST, passwordFieldReg2, 0, SpringLayout.EAST,
+				passwordFieldReg1);
+		panelRegistrieren.add(passwordFieldReg2);
+
+		JLabel lblRegNickname = new JLabel("Nickname");
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, btnRegRegistrieren, 30, SpringLayout.NORTH,
+				lblRegNickname);
+		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, btnRegRegistrieren, 0, SpringLayout.WEST, lblRegNickname);
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, lblRegNickname, 10, SpringLayout.SOUTH, lblRegPasswort2);
+		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, lblRegNickname, 0, SpringLayout.WEST, lblRegPasswort2);
+		lblRegNickname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panelRegistrieren.add(lblRegNickname);
+
+		textFieldRegNickname = new JTextField();
+		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, textFieldRegNickname, 0, SpringLayout.NORTH,
+				lblRegNickname);
+		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, textFieldRegNickname, 0, SpringLayout.WEST,
+				passwordFieldReg2);
+		sl_panelRegistrieren.putConstraint(SpringLayout.SOUTH, textFieldRegNickname, 0, SpringLayout.SOUTH,
+				lblRegNickname);
+		sl_panelRegistrieren.putConstraint(SpringLayout.EAST, textFieldRegNickname, 0, SpringLayout.EAST,
+				passwordFieldReg2);
+		textFieldRegNickname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panelRegistrieren.add(textFieldRegNickname);
+		textFieldRegNickname.setColumns(10);
 
 		JPanel panelErfolg = new JPanel();
-		panelErfolg.setBackground(Color.WHITE);
 		panelErfolg.setVisible(false);
+		panelErfolg.setBackground(Color.WHITE);
 		tabbedPane.addTab("Erfolgreicher Login", null, panelErfolg, null);
+		tabbedPane.setEnabledAt(2, false);
 		SpringLayout sl_panelErfolg = new SpringLayout();
 		panelErfolg.setLayout(sl_panelErfolg);
 
@@ -142,10 +248,8 @@ public class Hauptansicht extends JFrame {
 		lblLoginErfolgreich.setOpaque(true);
 		lblLoginErfolgreich.setBackground(new Color(0.15f, 1.0f, 0.25f, 0.3333f));
 		panelErfolg.add(lblLoginErfolgreich);
-		tabbedPane.setEnabledAt(2, false);
 
 		// Action Listener implementieren für Action Commands
-		// Action Listener implementieren
 		ActionListener aL = new ActionListener() {
 
 			@Override
@@ -168,9 +272,23 @@ public class Hauptansicht extends JFrame {
 						panelErfolg.setVisible(true);
 						panelErfolg.setEnabled(true);
 						tabbedPane.setSelectedIndex(2);
+
+						JDialogErfolg dialog = new JDialogErfolg("Erfolg!");
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
 					} else {
 //						System.out.println("Schlecht.");
 					}
+					break;
+				}
+				case "starteRegistrieren": {
+//					db.getNextAvailableAccountID();
+//					 Hack um aus char[] ein String zu formen
+					String pw = "";
+					for (char c : passwordFieldReg1.getPassword()) {
+						pw += c;
+					}
+					db.createAccount(lblRegNickname.getText(), pw, textFieldRegEmail.getText(), null);
 					break;
 				}
 				}
@@ -180,5 +298,46 @@ public class Hauptansicht extends JFrame {
 		// Actionlistener hinzufügen
 		btnLogin.addActionListener(aL);
 		btnRegistrieren.addActionListener(aL);
+		btnRegRegistrieren.addActionListener(aL);
+		
+		// KeyListener hinzufügen
+		passwordFieldReg1.addKeyListener(kL);
+		passwordFieldReg2.addKeyListener(kL);
+		textFieldRegEmail.addKeyListener(kL);
+		textFieldRegNickname.addKeyListener(kL);
+
+		// Checken der DB Verbindung
+		if (db.isDbConnected()) {
+			textPaneInfoPaneLogin.setText("DB Verbindung erfolgreich!\nLogin und Registrieren möglich.");
+		} else {
+			textPaneInfoPaneLogin.setText("DB Verbindung fehlgeschlagen!");
+		}
+	}
+
+	/**
+	 * Funktion um aus Char[] einen String zu Formen aus Faulheits-Gründen.
+	 * 
+	 * @param pwc char[] aus PasswordField.
+	 * @return String aus char[].
+	 */
+	private String pw2string(char[] pwc) {
+		String pws = "";
+		for (char c : pwc) {
+			pws += c;
+		}
+		return pws;
+	}
+
+	private boolean checkRegFields() {
+		if (passwordFieldReg2.getPassword().length == 0 && textFieldRegEmail.getText().length() == 0
+				&& textFieldRegNickname.getText().length() == 0) {
+			return false;
+		} else {
+			if (pw2string(passwordFieldReg1.getPassword()).compareTo(pw2string(passwordFieldReg2.getPassword())) == 0) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package de.hankel.controller;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -26,11 +27,13 @@ public class DB {
 	/**
 	 * Standardkonstruktor für den DB Controller.
 	 */
-	public DB() {
+	public DB(String user, String password) {
 		driver = "com.mysql.jdbc.Driver";
 		url = "jdbc:mysql://localhost/egamedarling?";
-		user = "username";
-		password = "mypassword";
+		this.user = user;
+		this.password = password;
+//		user = "username";
+//		password = "mypassword";
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			Class.forName(driver);
@@ -79,5 +82,59 @@ public class DB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Prüft die DB Verbindung.
+	 * 
+	 * @param con Das Connection Objekt als Verbindung zur DB.
+	 * @return true bei Erfolg, false bei Fehler
+	 */
+	public boolean isDbConnected() {
+		try {
+			return con != null && !con.isClosed();
+		} catch (SQLException ignored) {
+		}
+
+		return false;
+	}
+
+	public int getNextAvailableAccountID() {
+		int max = 0;
+		String sql = "SELECT MAX(CAST(p_account_id AS Int)) FROM t_accounts; ";
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				max = rs.getInt(1);
+				System.out.println(max);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return max;
+	}
+
+	public boolean createAccount(String nickname, String passwort, String email, Blob avatar) {
+		if (avatar == null) {
+			int p_account_id = 1;
+			p_account_id += getNextAvailableAccountID();
+			String insert = "INSERT INTO t_accounts (p_account_id, email, passwort, nickname) VALUES (?,?,?,?)";
+			try {
+				PreparedStatement ps = con.prepareStatement(insert);
+				ps.setInt(1, p_account_id);
+				ps.setString(2, email);
+				ps.setString(3, passwort);
+				ps.setString(4, nickname);
+				ps.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} else {
+
+		}
+
+		return true;
 	}
 }
