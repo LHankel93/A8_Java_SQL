@@ -78,7 +78,6 @@ public class DB {
 			while (rs.next()) {
 				System.out.println(rs.getString("email"));
 			}
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -116,6 +115,14 @@ public class DB {
 		return max;
 	}
 
+	public void closeConnection() {
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public boolean createAccount(String nickname, String passwort, String email, Blob avatar) {
 		if (avatar == null) {
 			int p_account_id = 1;
@@ -131,10 +138,7 @@ public class DB {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		} else {
-
 		}
-
 		return true;
 	}
 }

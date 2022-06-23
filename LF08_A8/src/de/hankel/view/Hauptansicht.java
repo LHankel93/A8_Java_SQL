@@ -27,6 +27,8 @@ import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Klasse welche die Hauptansicht des Programmes darstellt.
@@ -176,6 +178,7 @@ public class Hauptansicht extends JFrame {
 		panelRegistrieren.add(passwordFieldReg1);
 
 		JButton btnRegRegistrieren = new JButton("Account registrieren");
+		btnRegRegistrieren.setEnabled(false);
 		btnRegRegistrieren.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnRegRegistrieren.setActionCommand("starteRegistrieren");
 		panelRegistrieren.add(btnRegRegistrieren);
@@ -299,12 +302,15 @@ public class Hauptansicht extends JFrame {
 		btnLogin.addActionListener(aL);
 		btnRegistrieren.addActionListener(aL);
 		btnRegRegistrieren.addActionListener(aL);
-		
+
 		// KeyListener hinzufügen
 		passwordFieldReg1.addKeyListener(kL);
 		passwordFieldReg2.addKeyListener(kL);
 		textFieldRegEmail.addKeyListener(kL);
 		textFieldRegNickname.addKeyListener(kL);
+
+		// WindowListener aktivieren und Window hinzufügen
+		aktiviereWindowListener(this);
 
 		// Checken der DB Verbindung
 		if (db.isDbConnected()) {
@@ -339,5 +345,20 @@ public class Hauptansicht extends JFrame {
 				return false;
 			}
 		}
+	}
+
+	/**
+	 * Fügt dem übergebenen Frame einen WindowListener hinzu und fügt eine Aktion
+	 * hinzu beim Schließen.
+	 * 
+	 * @param frame Der Frame, zu welchem der WindowListener hinzugefügt werden
+	 *              soll.
+	 */
+	private void aktiviereWindowListener(JFrame frame) {
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				db.closeConnection();
+			}
+		});
 	}
 }
