@@ -18,7 +18,9 @@ public class DB {
 
 	private String driver;
 	private String url;
+	@SuppressWarnings("unused")
 	private String user;
+	@SuppressWarnings("unused")
 	private String password;
 	private Connection con;
 	Statement stmt;
@@ -106,7 +108,7 @@ public class DB {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				max = rs.getInt(1);
-				System.out.println(max);
+				// System.out.println(max);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -117,7 +119,9 @@ public class DB {
 
 	public void closeConnection() {
 		try {
-			con.close();
+			if (con != null) {
+				con.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
