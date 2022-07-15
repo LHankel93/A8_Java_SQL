@@ -291,7 +291,7 @@ public class Hauptansicht extends JFrame {
 					for (char c : passwordFieldReg1.getPassword()) {
 						pw += c;
 					}
-					db.createAccount(lblRegNickname.getText(), pw, textFieldRegEmail.getText(), null);
+					db.createAccount(textFieldRegNickname.getText(), pw, textFieldRegEmail.getText(), null);
 					break;
 				}
 				}
