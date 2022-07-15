@@ -291,7 +291,14 @@ public class Hauptansicht extends JFrame {
 					for (char c : passwordFieldReg1.getPassword()) {
 						pw += c;
 					}
-					db.createAccount(textFieldRegNickname.getText(), pw, textFieldRegEmail.getText(), null);
+
+					if (db.createAccount(textFieldRegNickname.getText(), pw, textFieldRegEmail.getText(), null)) {
+						JDialogErfolg dialog = new JDialogErfolg("Erfolg!");
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} else {
+						System.err.println("Account anlegen fehlgeschlagen!");
+					}
 					break;
 				}
 				}

@@ -14,17 +14,22 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 
+/**
+ * Klasse welche JDialog um eine Erfolgsnachricht ergänzt.
+ * 
+ * @author Lorenz Hankel
+ *
+ */
 public class JDialogErfolg extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private ActionListener aL;
 
 	/**
-	 * Create the dialog.
+	 * Erstellt einen JDialog mit einer Nachricht.
+	 * 
+	 * @param message String Eine Nachricht für den Nutzer.
 	 */
 	public JDialogErfolg(String message) {
 		aktiviereActionListener();
@@ -61,14 +66,19 @@ public class JDialogErfolg extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
-		
-		
+
 	}
 
+	/**
+	 * Schließt den Dialog.
+	 */
 	private void schliesse() {
 		this.dispose();
 	}
 
+	/**
+	 * Fügt den ActionListener zum JDialog hinzu und implementiert ActionCommands.
+	 */
 	private void aktiviereActionListener() {
 		// Action Listener implementieren für Action Commands
 		aL = new ActionListener() {

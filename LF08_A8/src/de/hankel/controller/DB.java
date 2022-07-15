@@ -27,7 +27,10 @@ public class DB {
 	ResultSet rs;
 
 	/**
-	 * Standardkonstruktor für den DB Controller.
+	 * Standardkonstruktor für einen Datenbank-Controller Objekt.
+	 * 
+	 * @param user     String DB Account welcher benutzt werden soll.
+	 * @param password String DB Passwort welches benutzt werden soll.
 	 */
 	public DB(String user, String password) {
 		driver = "com.mysql.jdbc.Driver";
@@ -100,6 +103,12 @@ public class DB {
 		return false;
 	}
 
+	/**
+	 * Workaround für das Problem, dass die DB ein CHAR Feld benutzt für den PK.
+	 * Gibt den nächsten freien Integer zurück, nachdem die DB abgefragt wurde.
+	 * 
+	 * @return Integer Der nächste freie PK. (Leider nötig wegen CHAR Feld im PK.)
+	 */
 	public int getNextAvailableAccountID() {
 		int max = 0;
 		String sql = "SELECT MAX(CAST(p_account_id AS Int)) FROM t_accounts; ";
@@ -108,7 +117,6 @@ public class DB {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				max = rs.getInt(1);
-				// System.out.println(max);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -127,6 +135,15 @@ public class DB {
 		}
 	}
 
+	/**
+	 * Erstellt einen neuen Account auf der EgameDarlingDB.
+	 * 
+	 * @param nickname String Der Nickname des neuen Accounts.
+	 * @param passwort String Das Passwort des neuen Accounts.
+	 * @param email    String Der E-Mail Account des neuen Accounts.
+	 * @param avatar   BLOB Avatar des neuen Accounts.
+	 * @return Boolean True wenn erfolgreich, false wenn Fehler.
+	 */
 	public boolean createAccount(String nickname, String passwort, String email, Blob avatar) {
 		if (avatar == null) {
 			int p_account_id = 1;
@@ -141,8 +158,11 @@ public class DB {
 				ps.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return false;
 			}
+			return true;
+		} else {
+			return false;
 		}
-		return true;
 	}
 }
