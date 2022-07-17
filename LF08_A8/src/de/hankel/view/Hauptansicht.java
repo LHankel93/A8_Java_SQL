@@ -280,7 +280,7 @@ public class Hauptansicht extends JFrame {
 						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 						dialog.setVisible(true);
 					} else {
-//						System.out.println("Schlecht.");
+						
 					}
 					break;
 				}

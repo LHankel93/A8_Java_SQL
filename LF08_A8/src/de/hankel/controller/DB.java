@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JDialog;
+import de.hankel.view.JDialogFehler;
 
 /**
  * Klasse welche den Datenbank Controller darstellt.
@@ -96,6 +98,11 @@ public class DB {
 	 */
 	public boolean isDbConnected() {
 		try {
+			if (!(con != null && !con.isClosed())) {
+				JDialogFehler dialog = new JDialogFehler("Datenbank ist nicht erreichbar!");
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
+			}
 			return con != null && !con.isClosed();
 		} catch (SQLException ignored) {
 		}
