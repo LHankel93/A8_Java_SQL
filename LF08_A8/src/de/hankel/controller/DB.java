@@ -36,7 +36,10 @@ public class DB {
 	 * @param password String DB Passwort welches benutzt werden soll.
 	 */
 	public DB(String user, String password) {
-		driver = "com.mysql.jdbc.Driver";
+		// Alter Treiber :
+		// driver = "com.mysql.jdbc.Driver";
+		// Neuer Treiber :
+		driver = "com.mysql.cj.jdbc.Driver";
 		url = "jdbc:mysql://localhost/egamedarling?";
 		this.user = user;
 		this.password = password;
