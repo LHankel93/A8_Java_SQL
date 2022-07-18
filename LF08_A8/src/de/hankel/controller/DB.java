@@ -1,5 +1,6 @@
 package de.hankel.controller;
 
+import java.awt.Dialog.ModalityType;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -76,6 +77,31 @@ public class DB {
 	}
 
 	/**
+	 * Prüft ob ein Account mit übergebener E-Mail Adresse bereits in t_accounts
+	 * existiert, um Duplikate vorzubeugen.
+	 * 
+	 * @param email String Die E-Mail des Accounts, auf welchen geprüft werden soll.
+	 * @return Boolean True wenn bereits existiert, False wenn noch nicht existiert.
+	 */
+	public Boolean checkIfAccountAlreadyExists(String email) {
+		try {
+			// Projektion mit PreparedStatement vorbereiten
+			PreparedStatement ps = con.prepareStatement("SELECT email FROM t_accounts WHERE email =?");
+			ps.setString(1, email);
+			rs = ps.executeQuery();
+			// Durch ResultSet iterieren und nochmal prüfen, ob Daten korrekt
+			while (rs.next()) {
+				if (email.compareTo(rs.getString(1)) == 0) {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
 	 * Methode zum prüfen der DB.
 	 */
 	public void testdb() {
@@ -99,7 +125,7 @@ public class DB {
 	public boolean isDbConnected() {
 		try {
 			if (!(con != null && !con.isClosed())) {
-				JDialogFehler dialog = new JDialogFehler("Datenbank ist nicht erreichbar!");
+				JDialogFehler dialog = new JDialogFehler("Datenbank ist nicht erreichbar!", true);
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
 			}
@@ -148,27 +174,38 @@ public class DB {
 	 * @param nickname String Der Nickname des neuen Accounts.
 	 * @param passwort String Das Passwort des neuen Accounts.
 	 * @param email    String Der E-Mail Account des neuen Accounts.
-	 * @param avatar   BLOB Avatar des neuen Accounts.
+	 * @param avatar   BLOB Avatar-Bild des neuen Accounts.
 	 * @return Boolean True wenn erfolgreich, false wenn Fehler.
 	 */
 	public boolean createAccount(String nickname, String passwort, String email, Blob avatar) {
 		if (avatar == null) {
-			int p_account_id = 1;
-			p_account_id += getNextAvailableAccountID();
-			String insert = "INSERT INTO t_accounts (p_account_id, email, passwort, nickname) VALUES (?,?,?,?)";
-			try {
-				PreparedStatement ps = con.prepareStatement(insert);
-				ps.setInt(1, p_account_id);
-				ps.setString(2, email);
-				ps.setString(3, passwort);
-				ps.setString(4, nickname);
-				ps.executeUpdate();
-			} catch (SQLException e) {
-				e.printStackTrace();
+			if (checkIfAccountAlreadyExists(email)) {
+				int p_account_id = 1;
+				p_account_id += getNextAvailableAccountID();
+				String insert = "INSERT INTO t_accounts (p_account_id, email, passwort, nickname) VALUES (?,?,?,?)";
+				try {
+					PreparedStatement ps = con.prepareStatement(insert);
+					ps.setInt(1, p_account_id);
+					ps.setString(2, email);
+					ps.setString(3, passwort);
+					ps.setString(4, nickname);
+					ps.executeUpdate();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					return false;
+				}
+				return true;
+			} else {
+				JDialogFehler dialog = new JDialogFehler("Account existiert bereits.", false);
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setModal(true);
+				dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+				dialog.setVisible(true);
 				return false;
 			}
-			return true;
+
 		} else {
+			System.err.println("Funktion für BLOB noch nicht implementiert.");
 			return false;
 		}
 	}

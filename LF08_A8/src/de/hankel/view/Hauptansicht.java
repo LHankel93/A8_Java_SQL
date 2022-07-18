@@ -10,12 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
+import java.awt.Dialog.ModalityType;
+import java.awt.Window.Type;
+
 import javax.swing.ImageIcon;
 import javax.swing.SpringLayout;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import javax.swing.UIManager;
 import javax.swing.JPasswordField;
@@ -82,17 +83,17 @@ public class Hauptansicht extends JFrame {
 		SpringLayout sl_panelLogin = new SpringLayout();
 		panelLogin.setLayout(sl_panelLogin);
 
-		JTextArea textAreaEmail = new JTextArea();
-		textAreaEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textAreaEmail.setBackground(UIManager.getColor("Label.background"));
-		sl_panelLogin.putConstraint(SpringLayout.NORTH, textAreaEmail, 10, SpringLayout.NORTH, panelLogin);
-		sl_panelLogin.putConstraint(SpringLayout.EAST, textAreaEmail, -10, SpringLayout.EAST, panelLogin);
-		panelLogin.add(textAreaEmail);
+		JTextField textFieldEmail = new JTextField();
+		textFieldEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldEmail.setBackground(Color.WHITE);
+		sl_panelLogin.putConstraint(SpringLayout.NORTH, textFieldEmail, 10, SpringLayout.NORTH, panelLogin);
+		sl_panelLogin.putConstraint(SpringLayout.EAST, textFieldEmail, -10, SpringLayout.EAST, panelLogin);
+		panelLogin.add(textFieldEmail);
 
 		JLabel lblEmail = new JLabel("E-Mail");
-		sl_panelLogin.putConstraint(SpringLayout.WEST, textAreaEmail, 40, SpringLayout.EAST, lblEmail);
+		sl_panelLogin.putConstraint(SpringLayout.WEST, textFieldEmail, 40, SpringLayout.EAST, lblEmail);
 		lblEmail.setIcon(new ImageIcon(Hauptansicht.class.getResource("/img/at-solid_small.png")));
-		lblEmail.setLabelFor(textAreaEmail);
+		lblEmail.setLabelFor(textFieldEmail);
 		sl_panelLogin.putConstraint(SpringLayout.NORTH, lblEmail, 10, SpringLayout.NORTH, panelLogin);
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		sl_panelLogin.putConstraint(SpringLayout.WEST, lblEmail, 10, SpringLayout.WEST, panelLogin);
@@ -108,9 +109,9 @@ public class Hauptansicht extends JFrame {
 		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		sl_panelLogin.putConstraint(SpringLayout.NORTH, passwordField, 0, SpringLayout.NORTH, lblPasswort);
-		sl_panelLogin.putConstraint(SpringLayout.WEST, passwordField, 0, SpringLayout.WEST, textAreaEmail);
+		sl_panelLogin.putConstraint(SpringLayout.WEST, passwordField, 0, SpringLayout.WEST, textFieldEmail);
 		sl_panelLogin.putConstraint(SpringLayout.SOUTH, passwordField, 0, SpringLayout.SOUTH, lblPasswort);
-		sl_panelLogin.putConstraint(SpringLayout.EAST, passwordField, 0, SpringLayout.EAST, textAreaEmail);
+		sl_panelLogin.putConstraint(SpringLayout.EAST, passwordField, 0, SpringLayout.EAST, textFieldEmail);
 		panelLogin.add(passwordField);
 
 		JButton btnLogin = new JButton("Login");
@@ -148,14 +149,14 @@ public class Hauptansicht extends JFrame {
 		panelRegistrieren.setLayout(sl_panelRegistrieren);
 
 		JLabel lblRegEmail = new JLabel("E-Mail");
-		lblRegEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblRegEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, lblRegEmail, 10, SpringLayout.NORTH, panelRegistrieren);
 		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, lblRegEmail, 10, SpringLayout.WEST, panelRegistrieren);
 		panelRegistrieren.add(lblRegEmail);
 
 		JLabel lblRegPasswort1 = new JLabel("Passwort");
 		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, lblRegPasswort1, 0, SpringLayout.WEST, lblRegEmail);
-		lblRegPasswort1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblRegPasswort1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, lblRegPasswort1, 10, SpringLayout.SOUTH, lblRegEmail);
 		panelRegistrieren.add(lblRegPasswort1);
 
@@ -163,12 +164,15 @@ public class Hauptansicht extends JFrame {
 		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, textFieldRegEmail, 0, SpringLayout.NORTH, lblRegEmail);
 		sl_panelRegistrieren.putConstraint(SpringLayout.EAST, textFieldRegEmail, -10, SpringLayout.EAST,
 				panelRegistrieren);
-		textFieldRegEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		textFieldRegEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		sl_panelRegistrieren.putConstraint(SpringLayout.SOUTH, textFieldRegEmail, 0, SpringLayout.SOUTH, lblRegEmail);
 		panelRegistrieren.add(textFieldRegEmail);
 		textFieldRegEmail.setColumns(16);
 
 		passwordFieldReg1 = new JPasswordField();
+		sl_panelRegistrieren.putConstraint(SpringLayout.SOUTH, passwordFieldReg1, 0, SpringLayout.SOUTH,
+				lblRegPasswort1);
+		passwordFieldReg1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, passwordFieldReg1, 0, SpringLayout.NORTH,
 				lblRegPasswort1);
 		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, passwordFieldReg1, 0, SpringLayout.WEST,
@@ -187,7 +191,7 @@ public class Hauptansicht extends JFrame {
 		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, lblRegPasswort2, 10, SpringLayout.SOUTH,
 				lblRegPasswort1);
 		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, lblRegPasswort2, 0, SpringLayout.WEST, lblRegPasswort1);
-		lblRegPasswort2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblRegPasswort2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelRegistrieren.add(lblRegPasswort2);
 
 		KeyListener kL = (new KeyAdapter() {
@@ -202,6 +206,9 @@ public class Hauptansicht extends JFrame {
 		});
 
 		passwordFieldReg2 = new JPasswordField();
+		sl_panelRegistrieren.putConstraint(SpringLayout.SOUTH, passwordFieldReg2, 0, SpringLayout.SOUTH,
+				lblRegPasswort2);
+		passwordFieldReg2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, passwordFieldReg2, 0, SpringLayout.NORTH,
 				lblRegPasswort2);
 		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, passwordFieldReg2, 0, SpringLayout.WEST,
@@ -216,7 +223,7 @@ public class Hauptansicht extends JFrame {
 		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, btnRegRegistrieren, 0, SpringLayout.WEST, lblRegNickname);
 		sl_panelRegistrieren.putConstraint(SpringLayout.NORTH, lblRegNickname, 10, SpringLayout.SOUTH, lblRegPasswort2);
 		sl_panelRegistrieren.putConstraint(SpringLayout.WEST, lblRegNickname, 0, SpringLayout.WEST, lblRegPasswort2);
-		lblRegNickname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblRegNickname.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelRegistrieren.add(lblRegNickname);
 
 		textFieldRegNickname = new JTextField();
@@ -228,29 +235,9 @@ public class Hauptansicht extends JFrame {
 				lblRegNickname);
 		sl_panelRegistrieren.putConstraint(SpringLayout.EAST, textFieldRegNickname, 0, SpringLayout.EAST,
 				passwordFieldReg2);
-		textFieldRegNickname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		textFieldRegNickname.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelRegistrieren.add(textFieldRegNickname);
 		textFieldRegNickname.setColumns(10);
-
-		JPanel panelErfolg = new JPanel();
-		panelErfolg.setVisible(false);
-		panelErfolg.setBackground(Color.WHITE);
-		tabbedPane.addTab("Erfolgreicher Login", null, panelErfolg, null);
-		tabbedPane.setEnabledAt(2, false);
-		SpringLayout sl_panelErfolg = new SpringLayout();
-		panelErfolg.setLayout(sl_panelErfolg);
-
-		JLabel lblLoginErfolgreich = new JLabel("LOGIN ERFOLGREICH!");
-		lblLoginErfolgreich.setBackground(Color.GREEN);
-		sl_panelErfolg.putConstraint(SpringLayout.SOUTH, lblLoginErfolgreich, -10, SpringLayout.SOUTH, panelErfolg);
-		sl_panelErfolg.putConstraint(SpringLayout.EAST, lblLoginErfolgreich, -10, SpringLayout.EAST, panelErfolg);
-		lblLoginErfolgreich.setHorizontalAlignment(SwingConstants.CENTER);
-		sl_panelErfolg.putConstraint(SpringLayout.NORTH, lblLoginErfolgreich, 10, SpringLayout.NORTH, panelErfolg);
-		sl_panelErfolg.putConstraint(SpringLayout.WEST, lblLoginErfolgreich, 10, SpringLayout.WEST, panelErfolg);
-		lblLoginErfolgreich.setFont(new Font("Tahoma", Font.PLAIN, 38));
-		lblLoginErfolgreich.setOpaque(true);
-		lblLoginErfolgreich.setBackground(new Color(0.15f, 1.0f, 0.25f, 0.3333f));
-		panelErfolg.add(lblLoginErfolgreich);
 
 		// Action Listener implementieren für Action Commands
 		ActionListener aL = new ActionListener() {
@@ -270,17 +257,23 @@ public class Hauptansicht extends JFrame {
 						pw += c;
 					}
 					// Prüfen des Logins durch Controller
-					if (db.checkLogin(textAreaEmail.getText(), pw)) {
-//						System.out.println("Gut.");
-						panelErfolg.setVisible(true);
-						panelErfolg.setEnabled(true);
-						tabbedPane.setSelectedIndex(2);
-
+					if (db.checkLogin(textFieldEmail.getText(), pw)) {
+						// modal-Dialog mit Erfolgsnachricht erstellen.
 						JDialogErfolg dialog = new JDialogErfolg("Erfolg!");
 						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setModal(true);
+						dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+						dialog.setType(Type.POPUP);
 						dialog.setVisible(true);
 					} else {
-
+						// modal Dialog mit Fehlernachricht erstellen.
+						JDialogFehler dialog = new JDialogFehler("Kein Account mit entsprechenden Daten gefunden!",
+								false);
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setModal(true);
+						dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+						dialog.setType(Type.POPUP);
+						dialog.setVisible(true);
 					}
 					break;
 				}

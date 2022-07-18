@@ -19,23 +19,28 @@ public class JDialogFehler extends JDialogErfolg {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private ActionListener aL;
+	private boolean kritisch;
 
 	/**
 	 * Standardkonstruktor für JDialogFehler Klasse, Super ist die Klasse
 	 * JDialogErfolg.
 	 * 
-	 * @param message Die (Fehler-) Nachricht, welche dem Nutzer mitgeteilt werden
-	 *                soll.
+	 * @param message  String Die (Fehler-) Nachricht, welche dem Nutzer mitgeteilt
+	 *                 werden soll.
+	 * @param kritisch Boolean Ist der Fehler kritisch? Bestimmt, ob das Programm
+	 *                 geschlossen wird nach schließen des Dialoges.
 	 */
-	public JDialogFehler(String message) {
-		super(message);
+	public JDialogFehler(String message, boolean kritisch) {
+		super(message); // Super-Standardkonstruktor aufrufen und Fehlernachricht übergeben.
+		this.kritisch = kritisch;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 		setModal(true);
 		setType(Type.POPUP);
 		aktiviereActionListener();
-		setIconImage(Toolkit.getDefaultToolkit().getImage(JDialogFehler.class.getResource("/img/triangle-exclamation-solid.png")));
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(JDialogFehler.class.getResource("/img/triangle-exclamation-solid.png")));
 		setTitle("Fehler!");
 		getContentPane().setBackground(Color.WHITE);
 		setBackground(Color.WHITE);
@@ -74,8 +79,11 @@ public class JDialogFehler extends JDialogErfolg {
 	 * Schließt den Dialog.
 	 */
 	private void schliesse() {
-		System.exit(1);
-		this.dispose();
+		if (this.kritisch) {
+			System.exit(1);
+		} else {
+			this.dispose();
+		}
 	}
 
 	/**
