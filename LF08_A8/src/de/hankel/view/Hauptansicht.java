@@ -280,13 +280,11 @@ public class Hauptansicht extends JFrame {
 						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 						dialog.setVisible(true);
 					} else {
-						
+
 					}
 					break;
 				}
 				case "starteRegistrieren": {
-//					db.getNextAvailableAccountID();
-//					 Hack um aus char[] ein String zu formen
 					String pw = "";
 					for (char c : passwordFieldReg1.getPassword()) {
 						pw += c;
